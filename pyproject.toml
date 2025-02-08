@@ -4,6 +4,9 @@ version = "0.1.0"
 description = ""
 authors = ["Author <author@gmail.com>"]
 readme = "README.md"
+packages = [
+  { include = "app", from = "." }
+]
 
 [tool.poetry.dependencies]
 python = ">=3.11, <3.13"
@@ -12,6 +15,8 @@ httpx = "^0.25.0"
 fastapi = "^0.115.6"
 sqlalchemy = "^2.0.37"
 aiosqlite = "^0.20.0"
+asyncpg = "^0.30.0"
+pydantic = {extras = ["email"], version = "^2.10.6"}
 
 
 [tool.poetry.group.dev.dependencies]
@@ -27,6 +32,8 @@ pytest-httpx = "^0.26.0"
 pytest-mock = "^3.11.1"
 pytest-mock-server = "^0.3.0"
 pytest-xdist = "^3.3.1"
+pre-commit = "^4.1.0"
+black = "^25.1.0"
 
 
 [build-system]
