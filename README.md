@@ -7,7 +7,16 @@
 
 `docker compose up --build -d `
 
-## Миграции
+
+## Миграции 
+### *Для Linux(Ubuntu)
+### Инициализация новой миграции 
+`sudo docker compose exec app alembic revision --autogenerate -m "NAME"`
+
+### Применение миграции
+`sudo docker compose exec app alembic upgrade head`
+
+## Cнимки БД
 ### *Для Linux(Ubuntu)
 #### Применение последнего дампа 
 ` sudo bash ./scripts/restore.sh`
@@ -15,3 +24,5 @@
 #### Создание нового дампа
 
 ` sudo bash ./scripts/dump.sh`
+
+

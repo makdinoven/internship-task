@@ -17,6 +17,12 @@ sqlalchemy = "^2.0.37"
 aiosqlite = "^0.20.0"
 asyncpg = "^0.30.0"
 pydantic = {extras = ["email"], version = "^2.10.6"}
+alembic = "^1.14.1"
+python-dotenv = "^1.0.1"
+psycopg2-binary = "^2.9.10"
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+pyjwt = "^2.10.1"
+python-multipart = "^0.0.20"
 
 
 [tool.poetry.group.dev.dependencies]
