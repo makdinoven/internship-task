@@ -2,8 +2,8 @@ import uvicorn
 from fastapi import Depends, FastAPI
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from .api import analysis, auth, transactions, users
-from .db.sessions import create_db_and_tables, get_async_session
+from app.api import analysis, auth, transactions, users
+from app.db.sessions import create_db_and_tables, get_async_session
 
 app = FastAPI()
 

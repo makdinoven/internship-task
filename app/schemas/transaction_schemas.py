@@ -3,7 +3,8 @@ from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict
 
-from .enums import CurrencyEnum, TransactionStatusEnum, TransactionTypeEnum
+from app.schemas.enums import (CurrencyEnum, TransactionStatusEnum,
+                               TransactionTypeEnum)
 
 
 class RequestTransactionModel(BaseModel):

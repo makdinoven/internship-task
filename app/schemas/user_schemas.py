@@ -3,7 +3,7 @@ from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict, EmailStr, root_validator
 
-from .enums import CurrencyEnum, UserRoleEnum, UserStatusEnum
+from app.schemas.enums import CurrencyEnum, UserRoleEnum, UserStatusEnum
 
 
 class RequestUserModel(BaseModel):

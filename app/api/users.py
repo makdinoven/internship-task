@@ -4,12 +4,12 @@ from fastapi import APIRouter, Depends, Query, status
 from pydantic import EmailStr
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from ..db.sessions import get_async_session
-from ..dependencies import get_current_admin
-from ..schemas.enums import UserStatusEnum
-from ..schemas.user_schemas import (RequestUserModel, RequestUserUpdateModel,
-                                    ResponseUserModel, UserModel)
-from ..services import user_service
+from app.db.sessions import get_async_session
+from app.dependencies import get_current_admin
+from app.schemas.enums import UserStatusEnum
+from app.schemas.user_schemas import (RequestUserModel, RequestUserUpdateModel,
+                                      ResponseUserModel, UserModel)
+from app.services import user_service
 
 router = APIRouter()
 

@@ -4,13 +4,13 @@ from fastapi import APIRouter, Depends, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from .. import config
-from ..db.sessions import get_async_session
-from ..exceptions.exceptions import (InvalidCredentialsException,
-                                     InvalidTokenException)
-from ..schemas.auth_schemas import Token
-from ..schemas.user_schemas import ResponseUserModel
-from ..services import auth_service, user_service
+from app import config
+from app.db.sessions import get_async_session
+from app.exceptions.exceptions import (InvalidCredentialsException,
+                                       InvalidTokenException)
+from app.schemas.auth_schemas import Token
+from app.schemas.user_schemas import ResponseUserModel
+from app.services import auth_service, user_service
 
 router = APIRouter()
 

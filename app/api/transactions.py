@@ -3,13 +3,13 @@ import typing
 from fastapi import APIRouter, Depends, Query, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from ..db.sessions import get_async_session
-from ..dependencies import get_current_admin, get_current_user
-from ..exceptions.exceptions import InsufficientPrivilegesException
-from ..schemas.enums import TransactionDirectionEnum, UserRoleEnum
-from ..schemas.transaction_schemas import (RequestTransactionModel,
-                                           TransactionModel)
-from ..services import transaction_service
+from app.db.sessions import get_async_session
+from app.dependencies import get_current_admin, get_current_user
+from app.exceptions.exceptions import InsufficientPrivilegesException
+from app.schemas.enums import TransactionDirectionEnum, UserRoleEnum
+from app.schemas.transaction_schemas import (RequestTransactionModel,
+                                             TransactionModel)
+from app.services import transaction_service
 
 router = APIRouter()
 
