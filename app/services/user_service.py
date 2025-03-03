@@ -6,16 +6,16 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from ..exceptions.exceptions import (BadRequestDataException,
-                                     UserAlreadyActiveException,
-                                     UserAlreadyBlockedException,
-                                     UserAlreadyExistsException,
-                                     UserNotExistsException)
-from ..models.db_models import User, UserBalance
-from ..schemas.enums import CurrencyEnum, UserRoleEnum, UserStatusEnum
-from ..schemas.user_schemas import (RequestUserModel, RequestUserUpdateModel,
-                                    ResponseUserBalanceModel,
-                                    ResponseUserModel, UserModel)
+from app.exceptions.exceptions import (BadRequestDataException,
+                                       UserAlreadyActiveException,
+                                       UserAlreadyBlockedException,
+                                       UserAlreadyExistsException,
+                                       UserNotExistsException)
+from app.models.db_models import User, UserBalance
+from app.schemas.enums import CurrencyEnum, UserRoleEnum, UserStatusEnum
+from app.schemas.user_schemas import (RequestUserModel, RequestUserUpdateModel,
+                                      ResponseUserBalanceModel,
+                                      ResponseUserModel, UserModel)
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

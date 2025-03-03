@@ -4,18 +4,16 @@ from decimal import Decimal
 from sqlalchemy import and_, or_, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from ..exceptions.exceptions import (BadRequestDataException,
-                                     CreateTransactionForBlockedUserException,
-                                     NegativeBalanceException,
-                                     TransactionAlreadyRollbackedException,
-                                     TransactionNotExistsException,
-                                     UpdateTransactionForBlockedUserException,
-                                     UserNotExistsException)
-from ..models.db_models import Transaction, User, UserBalance
-from ..schemas.enums import (TransactionDirectionEnum, TransactionStatusEnum,
-                             TransactionTypeEnum, UserStatusEnum)
-from ..schemas.transaction_schemas import (RequestTransactionModel,
-                                           TransactionModel)
+from app.exceptions.exceptions import (
+    BadRequestDataException, CreateTransactionForBlockedUserException,
+    NegativeBalanceException, TransactionAlreadyRollbackedException,
+    TransactionNotExistsException, UpdateTransactionForBlockedUserException,
+    UserNotExistsException)
+from app.models.db_models import Transaction, User, UserBalance
+from app.schemas.enums import (TransactionDirectionEnum, TransactionStatusEnum,
+                               TransactionTypeEnum, UserStatusEnum)
+from app.schemas.transaction_schemas import (RequestTransactionModel,
+                                             TransactionModel)
 
 
 async def get_transactions(

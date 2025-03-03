@@ -3,8 +3,8 @@ import typing
 from sqlalchemy.ext.asyncio import (AsyncSession, async_sessionmaker,
                                     create_async_engine)
 
-from ..config import DATABASE_URL
-from ..models.db_models import Base
+from app.config import DATABASE_URL
+from app.models.db_models import Base
 
 engine = create_async_engine(DATABASE_URL)
 async_session_maker = async_sessionmaker(engine, expire_on_commit=False)
