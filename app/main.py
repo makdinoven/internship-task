@@ -2,7 +2,7 @@ import uvicorn
 from fastapi import Depends, FastAPI
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api import analysis, auth, transactions, users
+from app.api import analysis, auth, exchange, transactions, users
 from app.db.sessions import create_db_and_tables, get_async_session
 
 app = FastAPI()
@@ -11,6 +11,7 @@ app.include_router(users.router, prefix="/users", tags=["users"])
 app.include_router(transactions.router, prefix="/transactions", tags=["transactions"])
 app.include_router(analysis.router, prefix="/analysis", tags=["analysis"])
 app.include_router(auth.router, prefix="/auth", tags=["auth"])
+app.include_router(exchange.router, prefix="/exchange", tags=["exchange"])
 
 
 @app.on_event("startup")

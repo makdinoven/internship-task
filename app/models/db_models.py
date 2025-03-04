@@ -50,11 +50,17 @@ class Transaction(Base):
     sender_id: Mapped[int] = mapped_column(Integer, ForeignKey("user.id"), nullable=False)
     recipient_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey("user.id"), nullable=True)
     currency: Mapped["CurrencyEnum"] = mapped_column(
-        Enum(CurrencyEnum, native_enum=False, create_constraint=True), nullable=False
+        Enum(CurrencyEnum, native_enum=False, create_constraint=True, name="currencyenum"), nullable=False
     )
     amount: Mapped[Decimal] = mapped_column(Numeric(precision=12, scale=6), nullable=False)
     type: Mapped["TransactionTypeEnum"] = mapped_column(
         Enum(TransactionTypeEnum, native_enum=False, create_constraint=True), nullable=False
+    )
+    from_currency: Mapped["CurrencyEnum"] = mapped_column(
+        Enum(CurrencyEnum, native_enum=False, create_constraint=True, name="fromcurrencyenum"), nullable=True
+    )
+    to_currency: Mapped["CurrencyEnum"] = mapped_column(
+        Enum(CurrencyEnum, native_enum=False, create_constraint=True, name="tocurrencyenum"), nullable=True
     )
     status: Mapped["TransactionStatusEnum"] = mapped_column(
         Enum(TransactionStatusEnum, native_enum=False, create_constraint=True), nullable=False

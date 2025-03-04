@@ -215,6 +215,29 @@ async def patch_rollback_transaction(transaction_id: int, session: AsyncSession)
             raise NegativeBalanceException(balance=recipient_balance.amount)
         recipient_balance.amount -= t_amount
 
+    elif db_transaction.type == TransactionTypeEnum.EXCHANGE.value:
+        query_from_balance = await session.execute(
+            select(UserBalance).where(
+                (UserBalance.user_id == db_transaction.sender_id)
+                & (UserBalance.currency == db_transaction.from_currency)
+            )
+        )
+        balance_from = query_from_balance.scalar()
+        if not balance_from:
+            raise BadRequestDataException(detail="From-currency balance not found")
+        query_to_balance = await session.execute(
+            select(UserBalance).where(
+                (UserBalance.user_id == db_transaction.sender_id) & (UserBalance.currency == db_transaction.to_currency)
+            )
+        )
+        balance_to = query_to_balance.scalar()
+        if not balance_to:
+            raise BadRequestDataException(detail="To-currency balance not found")
+        if balance_to.amount < Decimal(db_transaction.converted_amount):
+            raise NegativeBalanceException(balance=balance_to.amount)
+        balance_from.amount += t_amount
+        balance_to.amount -= Decimal(db_transaction.converted_amount)
+
     else:
         raise BadRequestDataException(detail="Unknown transaction type")
 
