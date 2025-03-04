@@ -37,6 +37,23 @@ services:
       - BROKER_URL=${BROKER_URL}
       - REDIS_URL=${REDIS_URL}
 
+  beat:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.worker
+    container_name: beat
+    command: poetry run celery -A app.celery beat --loglevel=info
+    volumes:
+      - .:/app
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - BROKER_URL=${BROKER_URL}
+      - REDIS_URL=${REDIS_URL}
+      - COINMARKETCAP_API_URL=${COINMARKETCAP_API_URL}
+
   db:
     image: postgres:15
     container_name: db

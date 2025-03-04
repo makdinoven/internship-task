@@ -1,7 +1,7 @@
 import typing
 from datetime import datetime
 
-from pydantic import BaseModel, ConfigDict, EmailStr, root_validator
+from pydantic import BaseModel, ConfigDict, EmailStr, model_validator
 
 from app.schemas.enums import CurrencyEnum, UserRoleEnum, UserStatusEnum
 
@@ -44,8 +44,8 @@ class UserBalanceModel(BaseModel):
     currency: typing.Optional[CurrencyEnum] = None
     amount: float
 
-    @root_validator(pre=True)
-    def validate_not_negative(self, values):
+    @model_validator(mode="before")
+    def validate_not_negative(cls, values):
         if "amount" in values and values.get("amount") is not None:
             if values["amount"] < 0:
                 raise ValueError("Amount cannot be negative")

@@ -28,6 +28,7 @@ class TransactionTypeEnum(StrEnum):
     DEPOSIT = "DEPOSIT"
     WITHDRAWAL = "WITHDRAWAL"
     TRANSFER = "TRANSFER"
+    EXCHANGE = "EXCHANGE"
 
 
 class UserRoleEnum(StrEnum):
