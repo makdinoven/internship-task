@@ -135,3 +135,22 @@ class InsufficientPrivilegesException(HTTPException):
     def __init__(self) -> None:
         detail = "Insufficient access rights"
         super().__init__(detail=detail, status_code=status.HTTP_403_FORBIDDEN)
+
+
+class ExchangeConversionException(HTTPException):
+    def __init__(self, detail: Optional[str] = "Currency conversion failed") -> None:
+        super().__init__(detail=detail, status_code=status.HTTP_400_BAD_REQUEST)
+
+
+class CurrencyRateFetchException(HTTPException):
+    def __init__(self, detail: Optional[str] = "Failed to fetch currency rates") -> None:
+        super().__init__(detail=detail, status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class UnsupportedCurrencyPairException(HTTPException):
+    def __init__(self, from_currency: Optional[str] = None, to_currency: Optional[str] = None) -> None:
+        if from_currency and to_currency:
+            detail = f"Unsupported currency pair: {from_currency} -> {to_currency}"
+        else:
+            detail = "Unsupported currency pair"
+        super().__init__(detail=detail, status_code=status.HTTP_400_BAD_REQUEST)
