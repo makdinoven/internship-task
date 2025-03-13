@@ -26,6 +26,7 @@ python-multipart = "^0.0.20"
 redis = "^5.2.1"
 celery = "^5.4.0"
 aioredis = "^2.0.1"
+openpyxl = "^3.1.5"
 
 
 [tool.poetry.group.dev.dependencies]
