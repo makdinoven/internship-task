@@ -154,3 +154,13 @@ class UnsupportedCurrencyPairException(HTTPException):
         else:
             detail = "Unsupported currency pair"
         super().__init__(detail=detail, status_code=status.HTTP_400_BAD_REQUEST)
+
+
+class ReportEnqueueException(HTTPException):
+    def __init__(self, detail: str = "Failed to enqueue report generation") -> None:
+        super().__init__(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=detail)
+
+
+class ReportGenerationFailedException(HTTPException):
+    def __init__(self, detail: str = "Report generation failed") -> None:
+        super().__init__(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=detail)
