@@ -120,18 +120,18 @@ async def populate_db(
         if user.status != UserStatusEnum.ACTIVE.value:
             continue
 
-        tx_start = user.created
-        tx_end = now
+        txn_start = user.created
+        txn_end = now
 
         async def safe_create_transaction(create_func, *args, **kwargs):
             async with async_session_maker() as new_session:
                 try:
-                    tx = await create_func(new_session, *args, **kwargs)
-                    tx.created = generate_random_datetime(tx_start, tx_end)
+                    txn = await create_func(new_session, *args, **kwargs)
+                    txn.created = generate_random_datetime(txn_start, txn_end)
                     if random.random() < cancel_probability:
-                        tx.status = TransactionStatusEnum.ROLLBACKED.value
+                        txn.status = TransactionStatusEnum.ROLLBACKED.value
                     await new_session.commit()
-                    return tx
+                    return txn
                 except Exception:
                     await new_session.rollback()
                     return None
@@ -149,9 +149,9 @@ async def populate_db(
                     amount=amount,
                     type=TransactionTypeEnum.DEPOSIT,
                 )
-                tx = await safe_create_transaction(create_transaction, user.id, deposit_data)
-                if tx:
-                    created_transactions.append(tx)
+                txn = await safe_create_transaction(create_transaction, user.id, deposit_data)
+                if txn:
+                    created_transactions.append(txn)
 
         # Withdrawal
         if random.random() < withdrawal_probability:
@@ -163,9 +163,9 @@ async def populate_db(
                     amount=amount,
                     type=TransactionTypeEnum.WITHDRAWAL,
                 )
-                tx = await safe_create_transaction(create_transaction, user.id, withdrawal_data)
-                if tx:
-                    created_transactions.append(tx)
+                txn = await safe_create_transaction(create_transaction, user.id, withdrawal_data)
+                if txn:
+                    created_transactions.append(txn)
 
         # Transfer
         if random.random() < transfer_probability and len(user_ids) > 1:
@@ -180,19 +180,19 @@ async def populate_db(
                     type=TransactionTypeEnum.TRANSFER,
                     recipient_id=recipient_id,
                 )
-                tx = await safe_create_transaction(create_transaction, user.id, transfer_data)
-                if tx:
-                    created_transactions.append(tx)
+                txn = await safe_create_transaction(create_transaction, user.id, transfer_data)
+                if txn:
+                    created_transactions.append(txn)
 
         # Exchange
         if random.random() < exchange_probability:
             for _ in range(get_random_count()):
                 from_currency, to_currency = random.sample(list(CurrencyEnum), 2)
                 amount = round(random.uniform(min_amount, max_amount), 2)
-                tx = await safe_create_transaction(
+                txn = await safe_create_transaction(
                     create_exchange_transaction, user.id, from_currency, to_currency, amount
                 )
-                if tx:
-                    created_transactions.append(tx)
+                if txn:
+                    created_transactions.append(txn)
 
     return {"detail": f"Populated DB with {num_users} users and {len(created_transactions)} transactions."}
