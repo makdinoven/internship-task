@@ -1,9 +1,11 @@
 import asyncio
 import os
+import tempfile
 import uuid
 
 import pytest_asyncio
 from httpx import AsyncClient
+from sqlalchemy import event
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -13,13 +15,12 @@ from app.models.db_models import Base, User
 from app.services import auth_service
 from app.services.auth_service import pwd_context
 
-# Используем отдельную БД SQLite для тестов
-TEST_DB_URL = "sqlite+aiosqlite:///./test.db"
-# Удаляем файл тестовой БД, если остался от предыдущего запуска
-if os.path.exists("test.db"):
-    os.remove("test.db")
+fd, db_path = tempfile.mkstemp(suffix=".db")
+os.close(fd)
+os.chmod(db_path, 0o666)
 
-os.environ["DATABASE_URL"] = "sqlite:///./test.db"
+TEST_DB_URL = f"sqlite+aiosqlite:///{db_path}"
+os.environ["DATABASE_URL"] = f"sqlite:///{db_path}"
 
 engine = create_async_engine(TEST_DB_URL, future=True)
 AsyncSessionLocal = sessionmaker(bind=engine, class_=AsyncSession, expire_on_commit=False)  # type: ignore
@@ -48,10 +49,23 @@ app.dependency_overrides[get_async_session] = override_get_db  # type: ignore
 
 @pytest_asyncio.fixture
 async def db_session():
-    """Асинхронная сессия БД для модульных тестов."""
-    async with AsyncSessionLocal() as session:
-        yield session
-        await session.rollback()  # откатываем изменения после каждого теста
+    """AsyncSession, полностью изолированная save‑point‑ом."""
+    async with engine.connect() as conn:  # type: AsyncConnection
+        # начало “внешней” транзакции
+        trans = await conn.begin()
+        session: AsyncSession = AsyncSession(bind=conn, expire_on_commit=False)
+
+        # после каждого commit() открываем новый save‑point
+        @event.listens_for(session.sync_session, "after_transaction_end")
+        def _restart_savepoint(sess, trans_) -> None:
+            if trans_.nested and not trans_._parent.nested:
+                sess.begin_nested()
+
+        try:
+            yield session
+        finally:
+            await session.close()
+            await trans.rollback()  # откатываем ВСЁ
 
 
 @pytest_asyncio.fixture

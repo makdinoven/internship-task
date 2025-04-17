@@ -47,15 +47,15 @@ async def test_authenticate_user_success(db_session):
     created_user = await user_service.create_user(
         user=RequestUserModel(email=email, password=password), session=db_session
     )
-    if created_user:
-        # Пытаемся аутентифицировать с правильными данными (используем email)
-        auth_user = await auth_service.authenticate_user(db_session, email=email, password=password)
-        assert auth_user is not None
-        assert isinstance(auth_user, User)
-        assert auth_user.email == email
-        # Проверяем, что при неверном пароле возвращается None
-        failed_auth = await auth_service.authenticate_user(db_session, email=email, password="wrongpass")
-        assert failed_auth is None
+    # Пытаемся аутентифицировать с правильными данными (используем email)
+    auth_user = await auth_service.authenticate_user(db_session, email=email, password=password)
+    assert auth_user is not None
+    assert auth_user.email == created_user.email
+    assert isinstance(auth_user, User)
+    assert auth_user.email == email
+    # Проверяем, что при неверном пароле возвращается None
+    failed_auth = await auth_service.authenticate_user(db_session, email=email, password="wrongpass")
+    assert failed_auth is None
 
 
 @pytest.mark.asyncio
